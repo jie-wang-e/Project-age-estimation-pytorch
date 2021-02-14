@@ -1,3 +1,11 @@
+# DL-DIY potential project ideas
+- posing this problem as regression or classification
+- using [label smoothing](https://towardsdatascience.com/what-is-label-smoothing-108debd7ef06) for classification
+- using [Gaussian/Laplace likelihood loss](https://arxiv.org/abs/1703.04977) for regression
+- find strategies for dealing with imbalanced data
+
+---------------
+
 # Age Estimation PyTorch
 PyTorch-based CNN implementation for estimating age from face images.
 Currently only the APPA-REAL dataset is supported.
