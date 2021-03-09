@@ -1,8 +1,4 @@
-# Multi-task setting from the extended dataset
-
----------------
-
-# Age Estimation PyTorch
+# Age and Gender Estimation PyTorch (MTL)
 PyTorch-based CNN implementation for estimating age from face images.
 Currently only the APPA-REAL dataset is supported.
 Similar Keras-based project can be found [here](https://github.com/yu4u/age-gender-estimation).
