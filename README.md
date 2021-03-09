@@ -37,10 +37,16 @@ python demo.py --img_dir [PATH/TO/IMAGE_DIRECTORY] --output_dir [PATH/TO/OUTPUT_
 Download and extract the [APPA-REAL dataset](http://chalearnlap.cvc.uab.es/dataset/26/description/).
 
 > The APPA-REAL database contains 7,591 images with associated real and apparent age labels. The total number of apparent votes is around 250,000. On average we have around 38 votes per each image and this makes the average apparent age very stable (0.3 standard error of the mean).
+> Use other attributes from extended [APPA-REAL dataset](http://chalearnlap.cvc.uab.es/dataset/26/description/), e.g. ethnic, makeup, gender, expression, to train in a multi-task setting
 
 ```bash
 wget http://158.109.8.102/AppaRealAge/appa-real-release.zip
 unzip appa-real-release.zip
+```
+
+```bash
+wget http://sergioescalera.com/wp-content/uploads/2018/06/allcategories_trainvalidtest_split.zip
+unzip allcategories_trainvalidtest_split.zip -d /content/drive/MyDrive/project_map583/extended_data
 ```
 
 #### Train Model
@@ -48,7 +54,7 @@ Train a model using the APPA-REAL dataset.
 See `python train.py -h` for detailed options.
 
 ```bash
-python train.py --data_dir [PATH/TO/appa-real-release] --tensorboard tf_log
+python train.py --data_dir_age [PATH/TO/appa-real-release] --data_dir_extended [PATH/TO/extended-data] --tensorboard tf_log
 ```
 
 Check training progress:
@@ -63,22 +69,7 @@ tensorboard --logdir=tf_log
 You can change training parameters including model architecture using additional arguments like this:
 
 ```bash
-python train.py --data_dir [PATH/TO/appa-real-release] --tensorboard tf_log MODEL.ARCH se_resnet50 TRAIN.OPT sgd TRAIN.LR 0.1
+python train.py --data_dir_age [PATH/TO/appa-real-release] --data_dir_extended [PATH/TO/extended-data] --tensorboard tf_log MODEL.ARCH se_resnet50 TRAIN.OPT sgd TRAIN.WEIGHTS_LOSS_HEAD [0.8,0.2]
 ```
 
 All default parameters defined in [defaults.py](defaults.py) can be changed using this style.
-
-
-#### Test Trained Model
-Evaluate the trained model using the APPA-REAL test dataset.
-
-```bash
-python test.py --data_dir [PATH/TO/appa-real-release] --resume [PATH/TO/BEST_MODEL.pth]
-```
-
-After evaluation, you can see something like this:
-
-```bash
-100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:08<00:00,  1.28it/s]
-test mae: 4.800
-```
