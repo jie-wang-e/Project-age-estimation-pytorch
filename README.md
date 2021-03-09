@@ -1,8 +1,4 @@
-# DL-DIY potential project ideas
-- posing this problem as regression or classification
-- use [label smoothing](https://towardsdatascience.com/what-is-label-smoothing-108debd7ef06) for classification
-- use [Gaussian/Laplace likelihood loss](https://arxiv.org/abs/1703.04977) for regression
-- find strategies for dealing with imbalanced data
+# Multi-task setting from the extended dataset
 
 ---------------
 
@@ -27,17 +23,15 @@ See `python demo.py -h` for detailed options.
 python demo.py
 ```
 
-Using `--img_dir` argument, images in that directory will be used as input:
+Using `--img_dir` argument, images in that directory will be used as input  
 
-```bash
-python demo.py --img_dir [PATH/TO/IMAGE_DIRECTORY]
-```
-
-Further using `--output_dir` argument,
+Using `--output_dir` argument,
 resulting images will be saved in that directory (no resulting image window is displayed in this case):
 
+Further using `--resume` argumet, resume from this checkpoint
+
 ```bash
-python demo.py --img_dir [PATH/TO/IMAGE_DIRECTORY] --output_dir [PATH/TO/OUTPUT_DIRECTORY]
+python demo.py --img_dir [PATH/TO/IMAGE_DIRECTORY] --output_dir [PATH/TO/OUTPUT_DIRECTORY] --resume [FILE NAME/OF/CHECKPOINT]
 ```
 
 ## Train
