@@ -12,7 +12,7 @@ import torch.backends.cudnn as cudnn
 import torch.optim
 import torch.utils.data
 import torch.nn.functional as F
-from model import get_model
+from model import MODEL
 from defaults import _C as cfg
 
 
@@ -93,7 +93,8 @@ def main():
 
     # create model
     print("=> creating model '{}'".format(cfg.MODEL.ARCH))
-    model = get_model(model_name=cfg.MODEL.ARCH, pretrained=None)
+    model = MODEL(model_name=cfg.MODEL.ARCH, pretrained=None)
+    # model = get_model(model_name=cfg.MODEL.ARCH, pretrained=None)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model = model.to(device)
 
@@ -101,13 +102,15 @@ def main():
     resume_path = args.resume
 
     if resume_path is None:
-        resume_path = Path(__file__).resolve().parent.joinpath("misc", "epoch044_0.02343_3.9984.pth")
+        # resume_path = Path(__file__).resolve().parent.joinpath("misc", "epoch044_0.02343_3.9984.pth")
 
-        if not resume_path.is_file():
-            print(f"=> model path is not set; start downloading trained model to {resume_path}")
-            url = "https://github.com/yu4u/age-estimation-pytorch/releases/download/v1.0/epoch044_0.02343_3.9984.pth"
-            urllib.request.urlretrieve(url, str(resume_path))
-            print("=> download finished")
+        # if not resume_path.is_file():
+        #     print(f"=> model path is not set; start downloading trained model to {resume_path}")
+        #     url = "https://github.com/yu4u/age-estimation-pytorch/releases/download/v1.0/epoch044_0.02343_3.9984.pth"
+        #     urllib.request.urlretrieve(url, str(resume_path))
+        #     print("=> download finished")
+        print("=> model path is not set.")
+        return
 
     if Path(resume_path).is_file():
         print("=> loading checkpoint '{}'".format(resume_path))
@@ -149,13 +152,23 @@ def main():
 
                 # predict ages
                 inputs = torch.from_numpy(np.transpose(faces.astype(np.float32), (0, 3, 1, 2))).to(device)
-                outputs = F.softmax(model(inputs), dim=-1).cpu().numpy()
+                outputs_ages, outputs_genders = model(inputs)
+                outputs_ages = F.softmax(outputs_ages, dim=-1).cpu().numpy()
                 ages = np.arange(0, 101)
-                predicted_ages = (outputs * ages).sum(axis=-1)
+                predicted_ages = np.array([(outputs_ages * ages).sum(axis=-1)])
+                outputs_genders = outputs_genders.cpu().numpy()
+                predicted_genders = np.array([np.argmax(outputs_genders)==0])
+                print(predicted_ages)
+                print(predicted_genders)
 
                 # draw results
                 for i, d in enumerate(detected):
-                    label = "{}".format(int(predicted_ages[i]))
+                    # if predicted_genders[i].item():
+                    if predicted_genders[i]:
+                      pre_gender = 'male'
+                    else:
+                      pre_gender = 'female'
+                    label = "age: {}; gender: {}".format(int(predicted_ages[i]), pre_gender)
                     draw_label(img, (d.left(), d.top()), label)
 
             if args.output_dir is not None:
