@@ -2,7 +2,7 @@
 PyTorch-based CNN implementation for estimating age and gender from face images.
 Currently only the APPA-REAL dataset is supported.
 
-We worked on the original model of only age prediction and change it to a multi-task model for predicting both age and gender.
+We worked on the original model of only age prediction and change it to a multi-task model for predicting both age and gender. (All original files are replaced by updated one considering the MTL Method)
 <img src="misc/example_MTL.png" width="800px">
 
 ## Requirements
